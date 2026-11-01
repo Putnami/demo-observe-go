@@ -23,3 +23,16 @@ func TestWithTax(t *testing.T) {
 		t.Fatalf("WithTax = %d, want 1200", got)
 	}
 }
+
+func TestDiscount(t *testing.T) {
+	cases := []struct{ cents, bp, want int64 }{
+		{1000, 1000, 900},
+		{1000, 0, 1000},
+		{1000, 12000, 0},
+	}
+	for _, c := range cases {
+		if got := Discount(c.cents, c.bp); got != c.want {
+			t.Fatalf("Discount(%d, %d) = %d, want %d", c.cents, c.bp, got, c.want)
+		}
+	}
+}
