@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.work
+          cache-dependency-path: "**/go.sum"
+      - name: Build
+        run: go build ./pricing/... ./api/...
+      - name: Install gotestsum
+        run: go install gotest.tools/gotestsum@v1.12.0
+      - name: Test
+        run: |
+          mkdir -p reports
+          gotestsum --junitfile reports/junit.xml -- -coverprofile=reports/coverage.out ./pricing/... ./api/...
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports
+          path: reports/
+
+  publish:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.work
+          cache-dependency-path: "**/go.sum"
+      - name: Build the api binary
+        run: CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/api ./api
+      - uses: actions/upload-artifact@v4
+        with:
+          name: api-linux-amd64
+          path: dist/api
