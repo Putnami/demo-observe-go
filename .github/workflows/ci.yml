@@ -29,16 +29,14 @@ jobs:
           path: reports/
       - name: Observe the change
         if: ${{ !cancelled() }}
-        # Uncomment once an ingest token is set, to upload the evidence to Putnami Cloud.
-        # env:
-        #   PUTNAMI_CLOUD_TOKEN: ${{ secrets.PUTNAMI_CLOUD_TOKEN }}
+        env:
+          PUTNAMI_CLOUD_TOKEN: ${{ secrets.PUTNAMI_CLOUD_TOKEN }}
         run: |
           curl -fsSL https://putnami.dev/install.sh | bash -s -- --version canary
           export PATH="$HOME/.putnami/bin:$PATH"
           putnami extensions install --user @putnami/observe@canary
           putnami extensions install --user @putnami/cloud@canary
-          putnami observe --evidence observe-evidence.json
-          # putnami observe --evidence observe-evidence.json --upload
+          putnami observe --evidence observe-evidence.json --upload
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
