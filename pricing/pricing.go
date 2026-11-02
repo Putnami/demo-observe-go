@@ -29,3 +29,15 @@ func Subtotal(lines []Line) (int64, error) {
 func WithTax(cents int64, basisPoints int64) int64 {
 	return cents + (cents*basisPoints+5000)/10000
 }
+
+// Discount removes a percentage, in basis points, rounded half down in favor
+// of the customer.
+func Discount(cents int64, basisPoints int64) int64 {
+	if basisPoints <= 0 {
+		return cents
+	}
+	if basisPoints >= 10000 {
+		return 0
+	}
+	return cents - (cents*basisPoints+4999)/10000
+}
