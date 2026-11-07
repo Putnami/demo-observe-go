@@ -31,25 +31,20 @@ jobs:
         with:
           name: reports
           path: reports/
-      - name: Observe the change
+      - name: Observe with no input
+        uses: Putnami/putnami/tooling/observe/action@fdumay/build-928
         if: ${{ !cancelled() }}
-        env:
-          PUTNAMI_CLOUD_TOKEN: ${{ secrets.PUTNAMI_CLOUD_TOKEN }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          curl -fsSL https://putnami.dev/install.sh | bash -s -- --version canary
-          export PATH="$HOME/.putnami/bin:$PATH"
-          putnami extensions install --user @putnami/observe@canary
-          putnami extensions install --user @putnami/cloud@canary
-          putnami extensions install --user @putnami/intelligence@canary
-          putnami observe --evidence observe-evidence.json --upload --publish
-          putnami intelligence review-change --evidence observe-evidence.json --upload
+      - name: Observe with a token
+        id: observe
+        uses: Putnami/putnami/tooling/observe/action@fdumay/build-928
+        if: ${{ !cancelled() }}
+        with:
+          token: ${{ secrets.PUTNAMI_CLOUD_TOKEN }}
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: observe-evidence
-          path: observe-evidence.json
+          path: ${{ steps.observe.outputs.evidence }}
 
   publish:
     needs: test
