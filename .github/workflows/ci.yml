@@ -40,6 +40,8 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           token: ${{ secrets.PUTNAMI_CLOUD_TOKEN }}
+          # @putnami/cloud has no stable build yet: Putnami/putnami#961.
+          channel: latest
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
