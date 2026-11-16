@@ -1,2 +1,6 @@
 /reports/
 /dist/
+
+# Putnami
+.putnami/
+.gen/

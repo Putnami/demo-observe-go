@@ -1,0 +1,26 @@
+{
+  "$schema": "https://putnami.dev/schemas/putnami-spec.json",
+  "protocolVersion": 1,
+  "feature": "pricing/order-total",
+  "outcomes": [
+    "A caller gets the total of an order in cents from its lines and a tax rate, with no rounding drift"
+  ],
+  "nonGoals": [
+    "Currencies other than the euro",
+    "Discounts"
+  ],
+  "requirements": [
+    {
+      "id": "the-subtotal-sums-the-lines",
+      "text": "Subtotal returns the sum of unit price times quantity over every line, in cents."
+    },
+    {
+      "id": "a-negative-line-is-refused",
+      "text": "Subtotal returns ErrNegative when a line has a negative unit price or quantity."
+    },
+    {
+      "id": "tax-rounds-half-up",
+      "text": "WithTax adds a rate given in basis points to an amount in cents, rounded half up."
+    }
+  ]
+}

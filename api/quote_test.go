@@ -6,9 +6,12 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"go.putnami.dev/protocol/features/spectest"
 )
 
 func TestQuote(t *testing.T) {
+	spectest.Proves(t, "api/quote", "a-quote-includes-tax", "two-five-euro-lines-quote-twelve-euros")
 	body := `{"lines":[{"SKU":"a","UnitCents":500,"Quantity":2}]}`
 	rec := httptest.NewRecorder()
 	quote(rec, httptest.NewRequest(http.MethodPost, "/quote", strings.NewReader(body)))
@@ -28,6 +31,7 @@ func TestQuote(t *testing.T) {
 }
 
 func TestQuoteRejectsNegative(t *testing.T) {
+	spectest.Proves(t, "api/quote", "a-negative-line-is-unprocessable", "a-negative-unit-price-answers-422")
 	body := `{"lines":[{"SKU":"a","UnitCents":-5,"Quantity":1}]}`
 	rec := httptest.NewRecorder()
 	quote(rec, httptest.NewRequest(http.MethodPost, "/quote", strings.NewReader(body)))
@@ -37,6 +41,7 @@ func TestQuoteRejectsNegative(t *testing.T) {
 }
 
 func TestQuoteRejectsGet(t *testing.T) {
+	spectest.Proves(t, "api/quote", "only-post-is-accepted", "a-get-answers-405")
 	rec := httptest.NewRecorder()
 	quote(rec, httptest.NewRequest(http.MethodGet, "/quote", nil))
 	if rec.Code != http.StatusMethodNotAllowed {

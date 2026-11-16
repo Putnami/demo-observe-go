@@ -1,0 +1,9 @@
+{
+  "$schema": "https://putnami.dev/schemas/putnami-specs-baseline.json",
+  "protocolVersion": 2,
+  "executableRequirements": [
+    "pricing/order-total#a-negative-line-is-refused",
+    "pricing/order-total#tax-rounds-half-up",
+    "pricing/order-total#the-subtotal-sums-the-lines"
+  ]
+}

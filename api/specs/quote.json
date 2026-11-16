@@ -1,0 +1,26 @@
+{
+  "$schema": "https://putnami.dev/schemas/putnami-spec.json",
+  "protocolVersion": 1,
+  "feature": "api/quote",
+  "outcomes": [
+    "A client gets an identified quote, tax included, for the order lines it posts"
+  ],
+  "nonGoals": [
+    "Storing quotes",
+    "Authentication"
+  ],
+  "requirements": [
+    {
+      "id": "a-quote-includes-tax",
+      "text": "POST /quote answers 200 with a non-empty id and the subtotal of the lines plus 20 % tax, in cents."
+    },
+    {
+      "id": "a-negative-line-is-unprocessable",
+      "text": "POST /quote answers 422 when a line has a negative unit price or quantity."
+    },
+    {
+      "id": "only-post-is-accepted",
+      "text": "Any method other than POST on /quote answers 405."
+    }
+  ]
+}

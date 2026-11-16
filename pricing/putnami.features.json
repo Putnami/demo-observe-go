@@ -1,0 +1,35 @@
+{
+  "$schema": "https://putnami.dev/schemas/putnami-features.json",
+  "protocolVersion": 2,
+  "namespace": "pricing",
+  "features": [
+    {
+      "id": "pricing/order-total",
+      "type": "feature",
+      "name": "Order total",
+      "outcome": "An order's total in cents is the sum of its lines plus tax, and a negative line is refused",
+      "owner": "pricing",
+      "target": "coded",
+      "requirements": [
+        {
+          "id": "the-subtotal-sums-the-lines",
+          "stage": "coded",
+          "evidenceKinds": ["attestation"],
+          "verification": { "kind": "acceptance", "checks": ["two-lines-sum-to-their-total"] }
+        },
+        {
+          "id": "a-negative-line-is-refused",
+          "stage": "coded",
+          "evidenceKinds": ["attestation"],
+          "verification": { "kind": "acceptance", "checks": ["a-negative-unit-price-returns-err-negative"] }
+        },
+        {
+          "id": "tax-rounds-half-up",
+          "stage": "coded",
+          "evidenceKinds": ["attestation"],
+          "verification": { "kind": "acceptance", "checks": ["twenty-percent-of-ten-euros-is-two-euros"] }
+        }
+      ]
+    }
+  ]
+}
