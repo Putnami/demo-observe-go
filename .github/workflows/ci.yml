@@ -24,7 +24,7 @@ jobs:
       - name: Build
         run: go build ./pricing/... ./api/...
       - name: Install gotestsum
-        run: go install gotest.tools/gotestsum@v1.12.0
+        run: go install gotest.tools/gotestsum@v1.13.0
       - name: Test
         run: |
           mkdir -p reports
@@ -50,9 +50,8 @@ jobs:
         env:
           PUTNAMI_CLOUD_TOKEN: ${{ secrets.PUTNAMI_CLOUD_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # The workspace declares @putnami/observe and @putnami/cloud.
         run: |
-          putnami extensions install --user @putnami/observe@canary
-          putnami extensions install --user @putnami/cloud@canary
           putnami observe --evidence observe-evidence.json --upload --publish
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
