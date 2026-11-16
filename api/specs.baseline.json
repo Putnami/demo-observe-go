@@ -1,0 +1,9 @@
+{
+  "$schema": "https://putnami.dev/schemas/putnami-specs-baseline.json",
+  "protocolVersion": 2,
+  "executableRequirements": [
+    "api/quote#a-negative-line-is-unprocessable",
+    "api/quote#a-quote-includes-tax",
+    "api/quote#only-post-is-accepted"
+  ]
+}

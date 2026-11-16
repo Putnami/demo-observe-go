@@ -1,0 +1,12 @@
+{
+  "$schema": "https://putnami.dev/schemas/putnami-workspace.json",
+  "name": "demo-observe-go",
+  "extensions": [
+    "@putnami/go",
+    "@putnami/sdd"
+  ],
+  "includes": [
+    "api",
+    "pricing"
+  ]
+}

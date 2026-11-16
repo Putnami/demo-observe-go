@@ -1,0 +1,35 @@
+{
+  "$schema": "https://putnami.dev/schemas/putnami-features.json",
+  "protocolVersion": 2,
+  "namespace": "api",
+  "features": [
+    {
+      "id": "api/quote",
+      "type": "feature",
+      "name": "Quote endpoint",
+      "outcome": "A client posts order lines to /quote and gets back an identified quote whose total includes the 20 % tax",
+      "owner": "api",
+      "target": "coded",
+      "requirements": [
+        {
+          "id": "a-quote-includes-tax",
+          "stage": "coded",
+          "evidenceKinds": ["attestation"],
+          "verification": { "kind": "acceptance", "checks": ["two-five-euro-lines-quote-twelve-euros"] }
+        },
+        {
+          "id": "a-negative-line-is-unprocessable",
+          "stage": "coded",
+          "evidenceKinds": ["attestation"],
+          "verification": { "kind": "acceptance", "checks": ["a-negative-unit-price-answers-422"] }
+        },
+        {
+          "id": "only-post-is-accepted",
+          "stage": "coded",
+          "evidenceKinds": ["attestation"],
+          "verification": { "kind": "acceptance", "checks": ["a-get-answers-405"] }
+        }
+      ]
+    }
+  ]
+}

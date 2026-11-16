@@ -8,8 +8,15 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      statuses: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          # putnami observe measures a pull request from its merge base.
+          fetch-depth: 0
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.work
@@ -27,6 +34,31 @@ jobs:
         with:
           name: reports
           path: reports/
+      - name: Install Putnami
+        if: ${{ !cancelled() }}
+        run: |
+          curl -fsSL https://putnami.dev/install.sh | bash -s -- --version canary
+          echo "$HOME/.putnami/bin" >> "$GITHUB_PATH"
+      - name: Verify the specs
+        # Writes the spec verification record under .putnami/sessions/.
+        if: ${{ !cancelled() }}
+        run: |
+          putnami install
+          putnami test,validate --all
+      - name: Observe the change
+        if: ${{ !cancelled() }}
+        env:
+          PUTNAMI_CLOUD_TOKEN: ${{ secrets.PUTNAMI_CLOUD_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          putnami extensions install --user @putnami/observe@canary
+          putnami extensions install --user @putnami/cloud@canary
+          putnami observe --evidence observe-evidence.json --upload --publish
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: observe-evidence
+          path: observe-evidence.json
 
   publish:
     needs: test

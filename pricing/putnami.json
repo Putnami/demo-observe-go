@@ -1,0 +1,12 @@
+{
+  "$schema": "https://putnami.dev/schemas/putnami-project.json",
+  "name": "pricing",
+  "extensions": ["@putnami/go", "@putnami/sdd"],
+  "options": {
+    "sdd": {
+      "verification": {
+        "specs": "enforce"
+      }
+    }
+  }
+}
