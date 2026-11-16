@@ -25,7 +25,6 @@ func TestSubtotalRejectsNegative(t *testing.T) {
 }
 
 func TestWithTax(t *testing.T) {
-	spectest.Proves(t, "pricing/order-total", "tax-rounds-half-up", "twenty-percent-of-ten-euros-is-two-euros")
 	if got := WithTax(1000, 2000); got != 1200 {
 		t.Fatalf("WithTax = %d, want 1200", got)
 	}
